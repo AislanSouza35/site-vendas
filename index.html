@@ -1,0 +1,297 @@
+<title>Backend na Prática</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+  :root{
+    --ink:#071229;
+    --ink-2:#0c1b38;
+    --line:#1e3765;
+    --line-soft:#16294d;
+    --text:#e6edf9;
+    --muted:#9fb0ce;
+    --green:#2fd27a;
+    --green-deep:#17a85c;
+    --green-ink:#052213;
+    --blue:#5aa9ff;
+
+    --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --body:"Source Sans 3","Segoe UI",Arial,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",Consolas,monospace;
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:clamp(1rem,.97rem + .16vw,1.08rem);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{max-width:100%;height:auto;display:block}
+  a{color:var(--green)}
+
+  .wrap{width:min(940px,100% - 2.5rem);margin-inline:auto}
+
+  h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em;line-height:1.1}
+  h1{font-size:clamp(2rem,1.5rem + 2.2vw,3.1rem);font-weight:800}
+  h2{font-size:clamp(1.2rem,1.1rem + .5vw,1.5rem);font-weight:700}
+  h3{font-size:clamp(1.15rem,1.05rem + .45vw,1.4rem);font-weight:700;line-height:1.25}
+  p{margin:0}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.74rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ---- topo ---- */
+  header.topo{padding-block:clamp(3rem,7vw,5rem) clamp(2.5rem,5vw,3.5rem)}
+  .assinatura{display:flex;align-items:center;gap:1rem;margin-bottom:clamp(2rem,4vw,3rem)}
+  .marca{
+    width:42px;height:42px;flex:none;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--ink-2);
+    display:grid;place-items:center;
+    font-family:var(--display);
+    font-weight:800;
+    font-size:1rem;
+    color:var(--green);
+    letter-spacing:-.03em;
+  }
+  .assinatura b{font-family:var(--display);font-weight:700;font-size:1rem;letter-spacing:-.01em;display:block}
+  .assinatura span{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+  header.topo h1{max-width:18ch}
+  header.topo h1 em{font-style:normal;color:var(--green)}
+  header.topo .intro{margin-top:1.4rem;max-width:58ch;color:var(--muted);font-size:clamp(1.05rem,1rem + .3vw,1.24rem);line-height:1.55}
+
+  /* ---- lista de materiais ---- */
+  .catalogo{padding-bottom:clamp(3rem,6vw,4.5rem)}
+  .catalogo > .eyebrow{
+    display:flex;align-items:center;gap:.8rem;
+    padding-bottom:.9rem;
+    border-bottom:1px solid var(--line-soft);
+    color:var(--green);
+  }
+  .catalogo > .eyebrow .n{color:var(--muted);letter-spacing:.06em;text-transform:none;margin-left:auto}
+
+  .item{
+    display:grid;
+    grid-template-columns:132px 1fr auto;
+    gap:clamp(1.2rem,3vw,2.2rem);
+    align-items:center;
+    padding-block:clamp(1.8rem,4vw,2.4rem);
+    border-bottom:1px solid var(--line-soft);
+  }
+  @media (max-width:720px){
+    .item{grid-template-columns:96px 1fr;}
+    .item .acao{grid-column:1 / -1}
+  }
+
+  .item .capa img{
+    border-radius:2px 6px 6px 2px;
+    border:1px solid var(--line);
+    box-shadow:-4px 0 0 0 #0a1c3d,-5px 0 0 0 var(--line),14px 16px 34px -16px rgba(0,0,0,.85);
+  }
+  .item.breve .capa{
+    aspect-ratio:2/3;
+    border:1px dashed var(--line);
+    border-radius:6px;
+    display:grid;
+    place-items:center;
+    color:#42618f;
+    font-family:var(--mono);
+    font-size:1.6rem;
+  }
+
+  .item .meta{min-width:0}
+  .item .linha{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:.6rem}
+  .id{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .pill{
+    font-family:var(--mono);
+    font-size:.66rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:.2rem .55rem;
+    border-radius:99px;
+    border:1px solid;
+  }
+  .pill.on{color:var(--green);border-color:rgba(47,210,122,.4);background:rgba(47,210,122,.08)}
+  .pill.off{color:var(--muted);border-color:var(--line);background:transparent}
+
+  .item .meta p{color:var(--muted);font-size:.98rem;margin-top:.5rem;max-width:52ch}
+  .tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem;padding:0;list-style:none}
+  .tags li{
+    font-family:var(--mono);
+    font-size:.68rem;
+    color:var(--muted);
+    border:1px solid var(--line-soft);
+    border-radius:4px;
+    padding:.15rem .45rem;
+  }
+
+  .acao{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem}
+  @media (min-width:721px){.acao{align-items:flex-end;text-align:right}}
+  .preco{font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:-.03em;line-height:1}
+  .preco sup{font-size:.42em;vertical-align:.85em;color:var(--muted);margin-right:.1em}
+  .preco small{display:block;font-family:var(--mono);font-size:.66rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.35rem}
+
+  .btn{
+    display:inline-block;
+    background:var(--green);
+    color:var(--green-ink);
+    font-family:var(--display);
+    font-weight:800;
+    font-size:.95rem;
+    text-decoration:none;
+    padding:.75rem 1.4rem;
+    border-radius:6px;
+    border:1px solid var(--green);
+    white-space:nowrap;
+    transition:background .16s ease,transform .16s ease;
+  }
+  .btn:hover{background:#4ade8f;transform:translateY(-1px)}
+  .btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+  .btn.fantasma{background:transparent;color:var(--muted);border-color:var(--line);font-weight:600}
+  .btn.fantasma:hover{background:var(--ink-2);color:var(--text);transform:none}
+
+  /* ---- temas ---- */
+  .temas{padding-block:clamp(3rem,6vw,4.5rem);border-top:1px solid var(--line-soft)}
+  .temas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:8px;overflow:hidden;margin-top:1.8rem}
+  @media (max-width:820px){.temas-grid{grid-template-columns:1fr 1fr}}
+  @media (max-width:460px){.temas-grid{grid-template-columns:1fr}}
+  .tema{background:var(--ink);padding:1.4rem 1.3rem}
+  .tema b{display:block;font-family:var(--display);font-size:1rem;margin-bottom:.3rem}
+  .tema span{color:var(--muted);font-size:.9rem;line-height:1.5;display:block}
+
+  /* ---- autor ---- */
+  .autor{padding-block:clamp(3rem,6vw,4.5rem);border-top:1px solid var(--line-soft)}
+  .autor-grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(1.4rem,4vw,2.4rem);align-items:start;margin-top:1.6rem}
+  @media (max-width:600px){.autor-grid{grid-template-columns:1fr}}
+  .retrato{
+    width:84px;height:84px;flex:none;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--ink-2);
+    display:grid;place-items:center;
+    font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--green);letter-spacing:-.03em;
+  }
+  .autor p{color:var(--muted);max-width:60ch}
+  .autor p + p{margin-top:.9rem}
+
+  /* ---- rodape ---- */
+  footer{border-top:1px solid var(--line-soft);padding-block:2.4rem}
+  footer .wrap{
+    font-family:var(--mono);
+    font-size:.75rem;
+    color:#6d80a3;
+    line-height:1.8;
+    display:flex;
+    flex-wrap:wrap;
+    gap:.6rem 2rem;
+    justify-content:space-between;
+  }
+  footer a{border-bottom:1px solid rgba(47,210,122,.3);text-decoration:none}
+  footer a:hover{border-bottom-color:var(--green)}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+
+<header class="topo">
+  <div class="wrap">
+    <div class="assinatura">
+      <div class="marca" aria-hidden="true">AS</div>
+      <div>
+        <b>Aislan Souza</b>
+        <span>Material técnico · Ensino técnico</span>
+      </div>
+    </div>
+
+    <h1>Backend explicado <em>do jeito que o mercado cobra</em>.</h1>
+    <p class="intro">Materiais diretos ao ponto sobre SQL, PHP e MySQL — escritos para quem já programa um pouco e trava na hora de conectar o banco, proteger o sistema e colocar no ar.</p>
+  </div>
+</header>
+
+<section class="catalogo">
+  <div class="wrap">
+    <p class="eyebrow">SELECT * FROM materiais <span class="n">1 disponível · 1 em produção</span></p>
+
+    <article class="item">
+      <div class="capa">
+        <img src="capa.png" alt="Capa do Guia Prático de Consultas SQL" width="1024" height="1536">
+      </div>
+      <div class="meta">
+        <div class="linha">
+          <span class="id">#01 · E-book</span>
+          <span class="pill on">Disponível</span>
+        </div>
+        <h3>Guia Prático de Consultas SQL</h3>
+        <p>Do básico às otimizações de performance. 12 módulos que vão do banco vazio no phpMyAdmin ao sistema publicado no domínio, com código comentado em cada etapa.</p>
+        <ul class="tags">
+          <li>SQL</li><li>PHP</li><li>MySQL</li><li>PDO</li><li>Segurança</li><li>Deploy</li>
+        </ul>
+      </div>
+      <div class="acao">
+        <p class="preco"><sup>R$</sup>37<small>+ 2 bônus inclusos</small></p>
+        <a class="btn" href="guia-sql/">Ver o material</a>
+      </div>
+    </article>
+
+    <article class="item breve">
+      <div class="capa" aria-hidden="true">+</div>
+      <div class="meta">
+        <div class="linha">
+          <span class="id">#02</span>
+          <span class="pill off">Em produção</span>
+        </div>
+        <h3>Próximo material</h3>
+        <p>O segundo guia está sendo escrito. Se quiser ser avisado quando sair, me mande um e-mail — respondo pessoalmente.</p>
+      </div>
+      <div class="acao">
+        <a class="btn fantasma" href="mailto:aislan.ss29@gmail.com?subject=Quero%20saber%20do%20pr%C3%B3ximo%20material">Avise-me</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="temas">
+  <div class="wrap">
+    <p class="eyebrow">O que eu cubro</p>
+    <div class="temas-grid">
+      <div class="tema"><b>Consultas</b><span>SELECT, JOIN, GROUP BY, índices e leitura de EXPLAIN.</span></div>
+      <div class="tema"><b>Conexão</b><span>PDO, Prepared Statements e tratamento de erro em try/catch.</span></div>
+      <div class="tema"><b>Segurança</b><span>SQL Injection, sessões, senhas com hash e logs de erro.</span></div>
+      <div class="tema"><b>Publicação</b><span>Export e import do banco, FTP, credenciais e checklist de deploy.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="autor">
+  <div class="wrap">
+    <p class="eyebrow">Quem escreve</p>
+    <div class="autor-grid">
+      <div class="retrato" aria-hidden="true">AS</div>
+      <div>
+        <p>Atuo na área de tecnologia e ajudo desenvolvedores a entenderem o backend de forma simples, prática e focada no mercado de trabalho.</p>
+        <p>Cada material aqui nasce de um problema que eu vi acontecer de verdade — a conexão que funciona no XAMPP e morre na hospedagem, a consulta que trava quando a tabela cresce, o formulário aberto para SQL Injection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Aislan Souza · Materiais digitais</span>
+    <span>Suporte: <a href="mailto:aislan.ss29@gmail.com">aislan.ss29@gmail.com</a></span>
+    <span>Pagamento processado pela Hotmart</span>
+  </div>
+</footer>
