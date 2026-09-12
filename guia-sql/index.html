@@ -1,0 +1,914 @@
+<title>Guia Prático de Consultas SQL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+  :root{
+    --ink:#071229;
+    --ink-2:#0c1b38;
+    --ink-3:#122549;
+    --line:#1e3765;
+    --line-soft:#16294d;
+    --text:#e6edf9;
+    --muted:#9fb0ce;
+    --green:#2fd27a;
+    --green-deep:#17a85c;
+    --green-ink:#052213;
+    --blue:#5aa9ff;
+    --amber:#f5b84e;
+    --rose:#ff6b6b;
+
+    --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --body:"Source Sans 3","Segoe UI",Arial,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",Consolas,monospace;
+
+    --step--1:clamp(.82rem,.79rem + .14vw,.9rem);
+    --step-0:clamp(1.02rem,.98rem + .2vw,1.14rem);
+    --step-1:clamp(1.2rem,1.12rem + .38vw,1.42rem);
+    --step-2:clamp(1.5rem,1.32rem + .8vw,2rem);
+    --step-3:clamp(1.9rem,1.55rem + 1.5vw,2.9rem);
+    --step-4:clamp(2.3rem,1.6rem + 3vw,4.1rem);
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:var(--step-0);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{max-width:100%;height:auto;display:block}
+
+  .wrap{width:min(1080px,100% - 2.5rem);margin-inline:auto}
+  .wrap-narrow{width:min(760px,100% - 2.5rem);margin-inline:auto}
+
+  section{border-top:1px solid var(--line-soft)}
+  section > .wrap,section > .wrap-narrow{padding-block:clamp(3.5rem,7vw,6rem)}
+
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.08;letter-spacing:-.02em}
+  h1{font-size:var(--step-4);font-weight:800}
+  h2{font-size:var(--step-3);font-weight:800}
+  h3{font-size:var(--step-1);font-weight:700;letter-spacing:-.01em;line-height:1.25}
+  p{margin:0}
+  strong{color:#fff;font-weight:600}
+
+  /* ---- cláusula: o marcador de seção ---- */
+  .clause{
+    font-family:var(--mono);
+    font-size:var(--step--1);
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--green);
+    display:flex;
+    align-items:center;
+    gap:.7rem;
+    margin-bottom:1.4rem;
+  }
+  .clause::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg,var(--line) 0%,transparent 100%);
+  }
+  .clause .dim{color:var(--muted);text-transform:none;letter-spacing:.04em}
+
+  .lead{font-size:var(--step-1);color:var(--text);line-height:1.55}
+  .muted{color:var(--muted)}
+
+  /* ---- botão ---- */
+  .cta{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.15rem;
+    background:var(--green);
+    color:var(--green-ink);
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(1rem,.93rem + .35vw,1.2rem);
+    letter-spacing:-.01em;
+    text-decoration:none;
+    text-align:center;
+    padding:1.05rem 2rem;
+    border-radius:6px;
+    border:1px solid var(--green);
+    box-shadow:0 10px 34px -14px rgba(47,210,122,.85);
+    transition:transform .16s ease,box-shadow .16s ease,background .16s ease;
+  }
+  .cta small{
+    font-family:var(--mono);
+    font-size:.72rem;
+    font-weight:400;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    opacity:.72;
+  }
+  .cta:hover{background:#4ade8f;transform:translateY(-2px);box-shadow:0 16px 40px -14px rgba(47,210,122,.95)}
+  .cta:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+  /* ---- hero ---- */
+  .hero{border-top:0;position:relative;overflow:hidden}
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:-30% 30% 40% -20%;
+    background:radial-gradient(circle at 30% 40%,rgba(47,210,122,.13),transparent 62%);
+    pointer-events:none;
+  }
+  .hero .wrap{position:relative;padding-block:clamp(2.8rem,6vw,4.6rem) clamp(3.5rem,7vw,5.5rem)}
+
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2rem,5vw,4rem);align-items:center}
+  @media (max-width:820px){.hero-grid{grid-template-columns:1fr}}
+
+  .brandline{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:.6rem;
+    margin-bottom:clamp(2rem,4vw,3rem);
+  }
+  .brandline b{color:var(--text);font-weight:700}
+  .brandline span{color:var(--line)}
+
+  h1 .hl{color:var(--green)}
+  .hero-sub{margin-top:1.5rem;font-size:var(--step-1);color:var(--muted);max-width:52ch;line-height:1.5}
+  .hero-actions{margin-top:2.2rem;display:flex;flex-wrap:wrap;align-items:center;gap:1.1rem 1.6rem}
+  .price-inline{font-family:var(--mono);font-size:var(--step--1);color:var(--muted);line-height:1.5}
+  .price-inline b{display:block;font-family:var(--display);font-size:1.5rem;color:var(--text);letter-spacing:-.02em}
+
+  .book{position:relative}
+  .book img{
+    border-radius:3px 8px 8px 3px;
+    border:1px solid var(--line);
+    box-shadow:
+      -6px 0 0 0 #0a1c3d,
+      -7px 0 0 0 var(--line),
+      28px 34px 70px -24px rgba(0,0,0,.85);
+  }
+  .book-tag{
+    position:absolute;
+    left:50%;
+    transform:translate(-50%,-50%);
+    bottom:-1.4rem;
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-family:var(--mono);
+    font-size:.7rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    padding:.45rem .9rem;
+    border-radius:99px;
+    white-space:nowrap;
+  }
+
+  .trustbar{
+    margin-top:clamp(3rem,6vw,4.5rem);
+    border:1px solid var(--line-soft);
+    border-radius:8px;
+    background:linear-gradient(180deg,rgba(18,37,73,.6),rgba(12,27,56,.3));
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+  }
+  .trustbar div{
+    padding:1.1rem 1.3rem;
+    border-left:1px solid var(--line-soft);
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.04em;
+    color:var(--muted);
+    line-height:1.4;
+  }
+  .trustbar div:first-child{border-left:0}
+  .trustbar b{display:block;color:var(--text);font-family:var(--display);font-size:.95rem;letter-spacing:0;margin-bottom:.15rem}
+  @media (max-width:720px){.trustbar{grid-template-columns:1fr 1fr}.trustbar div:nth-child(3){border-left:0}.trustbar div:nth-child(n+3){border-top:1px solid var(--line-soft)}}
+
+  /* ---- bloco de código ---- */
+  .code{
+    background:#050f22;
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+    font-family:var(--mono);
+    font-size:clamp(.76rem,.71rem + .22vw,.88rem);
+    line-height:1.75;
+  }
+  .code header{
+    display:flex;
+    align-items:center;
+    gap:.55rem;
+    padding:.6rem .9rem;
+    background:var(--ink-2);
+    border-bottom:1px solid var(--line);
+    color:var(--muted);
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--line);flex:none}
+  .dot.red{background:#3d1f2a}
+  .code pre{margin:0;padding:1.1rem 1.2rem;overflow-x:auto;color:#c6d4ec}
+  .k{color:var(--blue)}
+  .s{color:var(--green)}
+  .c{color:#5f7399;font-style:italic}
+  .e{color:var(--rose)}
+  .w{color:var(--amber)}
+
+  /* ---- dor ---- */
+  .pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.2rem);align-items:start}
+  @media (max-width:820px){.pain-grid{grid-template-columns:1fr}}
+  .pain-list{list-style:none;margin:2rem 0 0;padding:0;display:grid;gap:1.4rem}
+  .pain-list li{padding-left:1.9rem;position:relative;color:var(--muted)}
+  .pain-list li::before{
+    content:"✕";
+    position:absolute;
+    left:0;
+    top:.05em;
+    color:var(--rose);
+    font-family:var(--mono);
+    font-size:.9em;
+  }
+  .pain-list b{color:var(--text);font-weight:600}
+
+  /* ---- solução ---- */
+  .solution{background:linear-gradient(180deg,rgba(18,37,73,.45),transparent)}
+  .solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.4rem);align-items:center}
+  @media (max-width:820px){.solution-grid{grid-template-columns:1fr}}
+  .checks{list-style:none;margin:2rem 0 0;padding:0;display:grid;gap:1.1rem}
+  .checks li{padding-left:1.9rem;position:relative}
+  .checks li::before{
+    content:"✓";
+    position:absolute;
+    left:0;
+    top:0;
+    color:var(--green);
+    font-family:var(--mono);
+    font-weight:700;
+  }
+
+  /* ---- video ---- */
+  .filme{background:linear-gradient(180deg,rgba(18,37,73,.4),transparent 70%)}
+  .filme-grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(2rem,5vw,3.6rem);align-items:center;margin-top:2.4rem}
+  @media (max-width:760px){.filme-grid{grid-template-columns:1fr;justify-items:center;text-align:left}}
+
+  .fone{
+    width:min(300px,78vw);
+    flex:none;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:9px;
+    background:var(--ink-2);
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.9);
+  }
+  .fone video{
+    display:block;
+    width:100%;
+    aspect-ratio:9/16;
+    border-radius:12px;
+    background:#f4f7fb;
+    object-fit:cover;
+  }
+  .fone-legenda{
+    margin-top:.7rem;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .filme-texto .checks{margin-top:1.6rem}
+  .filme-texto .cta{margin-top:2rem}
+
+  /* ---- módulos ---- */
+  .modules{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:8px;overflow:hidden;margin-top:2.6rem}
+  @media (max-width:900px){.modules{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.modules{grid-template-columns:1fr}}
+  .module{background:var(--ink);padding:1.6rem 1.5rem;display:flex;flex-direction:column;gap:.6rem}
+  .module .part{
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--green-deep);
+  }
+  .module p{color:var(--muted);font-size:.95rem;line-height:1.55}
+  .module .items{list-style:none;margin:.2rem 0 0;padding:0;display:grid;gap:.35rem}
+  .module .items li{font-family:var(--mono);font-size:.78rem;color:var(--muted);padding-left:1.1rem;position:relative;line-height:1.5}
+  .module .items li::before{content:"›";position:absolute;left:0;color:var(--blue)}
+
+  .preview{margin-top:3rem;border:1px solid var(--line);border-radius:8px;background:var(--ink-2);overflow:hidden}
+  .preview figcaption{
+    padding:.75rem 1.1rem;
+    border-bottom:1px solid var(--line);
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .preview .frame{max-height:min(560px,70vh);overflow:hidden;position:relative}
+  .preview .frame::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;bottom:0;
+    height:160px;
+    background:linear-gradient(180deg,transparent,var(--ink-2));
+  }
+
+  /* ---- bônus ---- */
+  .bonus{background:linear-gradient(180deg,rgba(23,168,92,.07),transparent 60%)}
+  .bonus-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:2.6rem}
+  @media (max-width:760px){.bonus-grid{grid-template-columns:1fr}}
+  .bonus-card{
+    border:1px solid var(--line);
+    border-top:3px solid var(--green);
+    border-radius:8px;
+    background:var(--ink-2);
+    padding:1.8rem 1.6rem;
+    display:flex;
+    flex-direction:column;
+    gap:.8rem;
+  }
+  .bonus-card .tag{
+    font-family:var(--mono);
+    font-size:.7rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--green);
+    display:flex;
+    justify-content:space-between;
+    gap:1rem;
+  }
+  .bonus-card .tag em{font-style:normal;color:var(--muted);text-decoration:line-through}
+  .bonus-card ul{list-style:none;margin:.4rem 0 0;padding:0;display:grid;gap:.55rem}
+  .bonus-card li{padding-left:1.5rem;position:relative;color:var(--muted);font-size:.95rem}
+  .bonus-card li::before{content:"✓";position:absolute;left:0;color:var(--green);font-family:var(--mono);font-size:.85em}
+
+  /* ---- para quem ---- */
+  .audience{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2.6rem}
+  @media (max-width:760px){.audience{grid-template-columns:1fr}}
+  .aud{border:1px solid var(--line-soft);border-radius:8px;padding:1.5rem;background:rgba(12,27,56,.5)}
+  .aud h3{font-size:1.05rem;margin-bottom:.5rem}
+  .aud p{color:var(--muted);font-size:.94rem;line-height:1.55}
+  .notfor{
+    margin-top:2rem;
+    border-left:2px solid var(--line);
+    padding:.2rem 0 .2rem 1.2rem;
+    color:var(--muted);
+    font-size:.95rem;
+  }
+
+  /* ---- autor ---- */
+  .author-grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(1.5rem,4vw,2.8rem);align-items:start}
+  @media (max-width:640px){.author-grid{grid-template-columns:1fr}}
+  .sig{
+    width:104px;height:104px;flex:none;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--ink-2);
+    display:grid;place-items:center;
+    font-family:var(--display);
+    font-weight:800;
+    font-size:1.9rem;
+    color:var(--green);
+    letter-spacing:-.03em;
+  }
+  .author-grid blockquote{margin:0;font-size:var(--step-1);line-height:1.55;color:var(--text)}
+  .author-grid .name{margin-top:1.4rem;font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .author-grid .name b{color:var(--green);font-weight:700}
+
+  /* ---- oferta ---- */
+  .offer{background:linear-gradient(180deg,rgba(18,37,73,.55),rgba(7,18,41,0))}
+  .offer-box{
+    margin-top:2.6rem;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--ink-2);
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+  }
+  @media (max-width:820px){.offer-box{grid-template-columns:1fr}}
+  .offer-list{padding:clamp(1.8rem,4vw,2.6rem);border-right:1px solid var(--line)}
+  @media (max-width:820px){.offer-list{border-right:0;border-bottom:1px solid var(--line)}}
+  .offer-list h3{margin-bottom:1.3rem;font-size:1.1rem}
+  .offer-list ul{list-style:none;margin:0;padding:0;display:grid;gap:.85rem}
+  .offer-list li{display:flex;justify-content:space-between;gap:1.2rem;align-items:baseline;font-size:.96rem;color:var(--muted);border-bottom:1px dashed var(--line-soft);padding-bottom:.85rem}
+  .offer-list li:last-child{border-bottom:0;padding-bottom:0}
+  .offer-list li span:last-child{font-family:var(--mono);font-size:.85rem;color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .offer-list .total{color:var(--text);font-weight:600}
+  .offer-list .total span:last-child{color:var(--muted);text-decoration:line-through}
+
+  .offer-buy{padding:clamp(1.8rem,4vw,2.6rem);display:flex;flex-direction:column;justify-content:center;gap:1.2rem;text-align:center;background:radial-gradient(circle at 50% 0%,rgba(47,210,122,.1),transparent 65%)}
+  .offer-buy .from{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .offer-buy .price{font-family:var(--display);font-weight:800;line-height:1;letter-spacing:-.04em;font-size:clamp(3rem,2rem + 5vw,4.4rem);color:#fff}
+  .offer-buy .price sup{font-size:.34em;vertical-align:.9em;margin-right:.12em;color:var(--muted);letter-spacing:0}
+  .offer-buy .cta{align-self:stretch}
+  .offer-buy .note{font-family:var(--mono);font-size:.74rem;color:var(--muted);line-height:1.6}
+
+  .guarantee{
+    margin-top:2rem;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:1.4rem;
+    align-items:center;
+    border:1px solid var(--line-soft);
+    border-radius:8px;
+    padding:1.5rem;
+    background:rgba(12,27,56,.45);
+  }
+  @media (max-width:560px){.guarantee{grid-template-columns:1fr}}
+  .seal{
+    width:92px;height:92px;
+    border-radius:50%;
+    border:2px dashed var(--green-deep);
+    display:grid;place-items:center;
+    text-align:center;
+    font-family:var(--display);
+    font-weight:800;
+    color:var(--green);
+    line-height:1;
+    font-size:1.7rem;
+  }
+  .seal small{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;font-weight:400;color:var(--muted);margin-top:.25rem}
+  .guarantee p{color:var(--muted);font-size:.96rem;line-height:1.6}
+
+  /* ---- faq ---- */
+  details{border-bottom:1px solid var(--line-soft);padding:1.1rem 0}
+  details summary{
+    cursor:pointer;
+    font-family:var(--display);
+    font-weight:600;
+    font-size:1.02rem;
+    color:var(--text);
+    list-style:none;
+    display:flex;
+    gap:1rem;
+    align-items:baseline;
+  }
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"+";color:var(--green);font-family:var(--mono);flex:none}
+  details[open] summary::before{content:"−"}
+  details summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+  details p{margin-top:.8rem;padding-left:1.9rem;color:var(--muted);font-size:.96rem}
+
+  /* ---- fechamento ---- */
+  .final{text-align:center;border-top:1px solid var(--line-soft);background:linear-gradient(180deg,transparent,rgba(23,168,92,.08))}
+  .final .wrap-narrow{display:flex;flex-direction:column;align-items:center;gap:1.6rem}
+  .final .clause{justify-content:center;width:100%;max-width:420px}
+  .final .clause::after{display:none}
+  .final p{color:var(--muted);max-width:50ch}
+
+  footer{border-top:1px solid var(--line-soft);padding-block:2.8rem}
+  footer .wrap{font-family:var(--mono);font-size:.76rem;color:#6d80a3;line-height:1.7}
+  .foot-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem 2.5rem}
+  @media (max-width:700px){.foot-cols{grid-template-columns:1fr}}
+  .foot-cols h4{
+    margin:0 0 .5rem;
+    font-family:var(--mono);
+    font-size:.7rem;
+    font-weight:400;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .foot-cols a{color:var(--green);text-decoration:none;border-bottom:1px solid rgba(47,210,122,.3)}
+  .foot-cols a:hover{border-bottom-color:var(--green)}
+  .foot-cols a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+  .foot-base a{color:var(--green);text-decoration:none;border-bottom:1px solid rgba(47,210,122,.3)}
+  .foot-base{
+    margin-top:2.2rem;
+    padding-top:1.4rem;
+    border-top:1px solid var(--line-soft);
+    display:flex;
+    flex-wrap:wrap;
+    gap:.6rem 2rem;
+    justify-content:space-between;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important}
+  }
+</style>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="brandline">
+      <b>Aislan Souza</b><span>/</span>Material de estudos<span>/</span>Ensino técnico
+    </div>
+
+    <div class="hero-grid">
+      <div>
+        <p class="clause">SELECT <span class="dim">— o que você leva</span></p>
+        <h1>Chega de travar no código. Aprenda a <span class="hl">consultar, conectar e publicar</span> sistemas com PHP e MySQL.</h1>
+        <p class="hero-sub">O guia prático e direto ao ponto para estudantes e programadores iniciantes que querem dominar SQL de verdade, proteger o backend contra SQL Injection e colocar o projeto no ar.</p>
+
+        <div class="hero-actions">
+          <a class="cta" href="https://pay.hotmart.com/O107578540B">
+            QUERO MEU GUIA AGORA
+            <small>Acesso imediato · PDF</small>
+          </a>
+          <p class="price-inline">
+            <b>R$ 37,00</b>
+            à vista no Pix ou<br>parcelado no cartão
+          </p>
+        </div>
+      </div>
+
+      <figure class="book" style="margin:0">
+        <img src="capa.png" alt="Capa do e-book Guia Prático de Consultas SQL: Do Básico às Otimizações de Performance Avançadas, de Aislan Souza" width="1024" height="1536">
+        <figcaption class="book-tag">E-book + 2 bônus · 12 módulos</figcaption>
+      </figure>
+    </div>
+
+    <div class="trustbar">
+      <div><b>12 módulos</b>do ambiente ao deploy</div>
+      <div><b>Código real</b>pronto para copiar</div>
+      <div><b>2 bônus</b>template ZIP + cheat sheet</div>
+      <div><b>7 dias</b>garantia Hotmart</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ A DOR ============ -->
+<section>
+  <div class="wrap">
+    <p class="clause">WHERE erro IS NOT NULL <span class="dim">— o problema</span></p>
+    <div class="pain-grid">
+      <div>
+        <h2>Você já viu essa tela às 2 da manhã.</h2>
+        <p class="lead muted" style="margin-top:1.4rem">Horas de tutorial no YouTube, centenas de linhas escritas — e na hora de conectar o banco ou subir o site para o cliente, tudo quebra. A faculdade explica a teoria e some justamente onde o mercado começa.</p>
+        <ul class="pain-list">
+          <li><b>A conexão funciona no XAMPP e morre na hospedagem.</b> Ninguém te mostrou que host, usuário e charset mudam em produção.</li>
+          <li><b>Você concatena variável dentro do SQL.</b> Funciona — até alguém digitar uma aspa no formulário e derrubar (ou vazar) seu banco.</li>
+          <li><b>A consulta trava quando a tabela cresce.</b> Faltam índice, LIMIT e uma leitura de EXPLAIN para descobrir o porquê.</li>
+        </ul>
+      </div>
+
+      <div class="code" role="img" aria-label="Exemplo de erro fatal de PDO ao conectar no MySQL em produção">
+        <header><span class="dot red"></span> php_errors.log</header>
+<pre><span class="e">PHP Fatal error:</span>  Uncaught PDOException:
+SQLSTATE[HY000] [1045] Access denied for
+user <span class="s">'root'</span>@<span class="s">'localhost'</span> (using password: NO)
+  in /home/site/public_html/conexao.php:<span class="w">12</span>
+
+<span class="c">-- e a consulta que "funcionava" ontem:</span>
+<span class="k">SELECT</span> * <span class="k">FROM</span> usuarios
+<span class="k">WHERE</span> email = <span class="s">'&lt;?= $_POST["email"] ?&gt;'</span>;
+<span class="c">--                    ^ SQL Injection aqui</span>
+
+<span class="c">-- 3.4s para 80 mil linhas:</span>
+<span class="k">EXPLAIN SELECT</span> ... <span class="w">type: ALL</span>  rows: <span class="w">80421</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ A SOLUÇÃO ============ -->
+<section class="solution">
+  <div class="wrap">
+    <p class="clause">FROM guia_pratico <span class="dim">— a solução</span></p>
+    <div class="solution-grid">
+      <div>
+        <h2>Escrito de programador para programador.</h2>
+        <p class="lead muted" style="margin-top:1.4rem">O <strong>Guia Prático de Consultas SQL</strong> pega você no <code style="font-family:var(--mono);font-size:.9em;color:var(--blue)">SELECT *</code> e te deixa no sistema publicado. Sem teoria solta, sem promessa milagrosa: cada módulo é um problema real com o código ao lado.</p>
+        <ul class="checks">
+          <li>Do básico (<b>SELECT, INSERT, UPDATE, DELETE</b>) às otimizações de performance com índices e EXPLAIN.</li>
+          <li>Todo exemplo em <b>PHP + PDO com Prepared Statements</b> — o jeito certo desde a primeira linha.</li>
+          <li>Formatado para <b>consulta rápida</b>: você volta na página do módulo em vez de reassistir uma aula de 40 minutos.</li>
+        </ul>
+      </div>
+
+      <div class="code">
+        <header><span class="dot"></span> conexao.php · do jeito certo</header>
+<pre><span class="k">try</span> {
+  $pdo = <span class="k">new</span> PDO(<span class="s">"mysql:host=$host;dbname=$db;charset=utf8mb4"</span>,
+                 $user, $pass);
+  $pdo-&gt;setAttribute(PDO::ATTR_ERRMODE,
+                     PDO::ERRMODE_EXCEPTION);
+} <span class="k">catch</span> (PDOException $e) {
+  error_log($e-&gt;getMessage());        <span class="c">// log, nunca na tela</span>
+  exit(<span class="s">"Erro na conexão."</span>);
+}
+
+$stmt = $pdo-&gt;prepare(<span class="s">"SELECT id, nome FROM usuarios
+                        WHERE email = :email LIMIT 1"</span>);
+$stmt-&gt;bindParam(<span class="s">':email'</span>, $email);   <span class="c">// blindado</span>
+$stmt-&gt;execute();</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VÍDEO ============ -->
+<section class="filme">
+  <div class="wrap">
+    <p class="clause">DESCRIBE guia_pratico <span class="dim">— o material em 15 segundos</span></p>
+    <h2>Prefere ver antes de ler?</h2>
+
+    <div class="filme-grid">
+      <figure class="fone" style="margin:0">
+        <video
+          src="video-15s.mp4"
+          poster="video-poster.jpg"
+          autoplay muted loop playsinline preload="metadata" controls
+          aria-label="Apresentação de 15 segundos do e-book: capa, comandos SQL, bônus e onde comprar"></video>
+        <figcaption class="fone-legenda">15 segundos · sem áudio</figcaption>
+      </figure>
+
+      <div class="filme-texto">
+        <p class="lead muted">Um resumo rápido do que você recebe — a capa, os comandos que o guia cobre e os dois bônus que vêm junto.</p>
+        <ul class="checks">
+          <li><b>SELECT, INSERT, UPDATE e DELETE</b> com exemplos em PHP + MySQL.</li>
+          <li><b>Menos teoria solta, mais aplicação real</b> — cada comando resolvendo um caso.</li>
+          <li><b>E-book + 2 bônus</b>, entregues na hora pela Hotmart.</li>
+        </ul>
+        <a class="cta" href="https://pay.hotmart.com/O107578540B">
+          GARANTA SEU ACESSO
+          <small>R$ 37 · 7 dias de garantia</small>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTEÚDO ============ -->
+<section>
+  <div class="wrap">
+    <p class="clause">GROUP BY modulo <span class="dim">— o que tem por dentro</span></p>
+    <h2>12 módulos, na ordem em que os problemas aparecem.</h2>
+    <p class="lead muted" style="margin-top:1.2rem;max-width:60ch">Cada bloco resolve uma etapa do ciclo de vida de um sistema — do banco vazio no phpMyAdmin até o domínio no ar.</p>
+
+    <div class="modules">
+      <article class="module">
+        <p class="part">Backend com PHP e MySQL</p>
+        <h3>Ambiente e conexão</h3>
+        <p>XAMPP, phpMyAdmin, modelagem da tabela e a classe PDO com tratamento de erro em try/catch.</p>
+        <ul class="items">
+          <li>CREATE DATABASE / CREATE TABLE</li>
+          <li>host, dbname, user, charset</li>
+        </ul>
+      </article>
+
+      <article class="module">
+        <p class="part">Manipulação de dados</p>
+        <h3>Formulários e INSERT</h3>
+        <p>Captura via <code style="font-family:var(--mono);color:var(--blue)">$_POST</code>, validação, trim e gravação com Prepared Statements.</p>
+        <ul class="items">
+          <li>bindParam e execute</li>
+          <li>Por que isso barra SQL Injection</li>
+        </ul>
+      </article>
+
+      <article class="module">
+        <p class="part">Exibição e atualização</p>
+        <h3>SELECT e UPDATE</h3>
+        <p>Listagem em tabela HTML com foreach, tela de edição e alteração segura com WHERE.</p>
+        <ul class="items">
+          <li>fetchAll(PDO::FETCH_ASSOC)</li>
+          <li>ORDER BY, LIMIT e paginação</li>
+        </ul>
+      </article>
+
+      <article class="module">
+        <p class="part">Exclusão e acesso</p>
+        <h3>DELETE e sessões</h3>
+        <p>Exclusão com confirmação e ID validado, login com password_verify e páginas protegidas.</p>
+        <ul class="items">
+          <li>session_start / session_destroy</li>
+          <li>password_hash e logout</li>
+        </ul>
+      </article>
+
+      <article class="module">
+        <p class="part">Segurança e produção</p>
+        <h3>Erros, logs e checklist</h3>
+        <p>Esconder o erro técnico do usuário, registrar em arquivo e o checklist pré-deploy completo.</p>
+        <ul class="items">
+          <li>display_errors Off, log_errors On</li>
+          <li>13 itens de verificação final</li>
+        </ul>
+      </article>
+
+      <article class="module">
+        <p class="part">Hospedagem e publicação</p>
+        <h3>Exportar, importar e subir</h3>
+        <p>Dump .sql no phpMyAdmin local, importação no cPanel, envio por FTP e ajuste da conexão.</p>
+        <ul class="items">
+          <li>Credenciais de produção</li>
+          <li>Teste final no domínio</li>
+        </ul>
+      </article>
+    </div>
+
+    <figure class="preview" style="margin-inline:0">
+      <figcaption>Prévia real das páginas do material</figcaption>
+      <div class="frame"><img src="paginas.png" alt="Mosaico das 12 páginas do e-book, cada uma com código PHP comentado, tabelas e avisos de boas práticas" width="1024" height="1536"></div>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ BÔNUS ============ -->
+<section class="bonus">
+  <div class="wrap">
+    <p class="clause">UNION ALL bonus <span class="dim">— incluso, sem custo extra</span></p>
+    <h2>Dois bônus que economizam o seu fim de semana.</h2>
+
+    <div class="bonus-grid">
+      <article class="bonus-card">
+        <p class="tag"><span>Bônus 1 · Arquivo ZIP</span><em>R$ 47</em></p>
+        <h3>Template estrutural pronto</h3>
+        <ul>
+          <li>Projeto limpo e todo comentado</li>
+          <li>Conexão PDO segura já configurada</li>
+          <li>Tela de login protegida por sessão</li>
+          <li>Base reaproveitável para sites e sistemas</li>
+        </ul>
+      </article>
+
+      <article class="bonus-card">
+        <p class="tag"><span>Bônus 2 · PDF</span><em>R$ 27</em></p>
+        <h3>Folha de consulta rápida</h3>
+        <ul>
+          <li>SELECT, INSERT, UPDATE e DELETE numa página</li>
+          <li>Funções úteis do PHP: password_hash, filter_input, header</li>
+          <li>Sintaxe do mysqli lado a lado com o PDO</li>
+          <li>Feito para deixar aberto no segundo monitor</li>
+        </ul>
+      </article>
+    </div>
+
+    <figure style="margin:2.6rem 0 0;border:1px solid var(--line);border-radius:8px;overflow:hidden">
+      <img src="oferta.png" alt="Visão geral do pacote: e-book, bônus 1 com template ZIP e bônus 2 com a folha de consulta rápida em PDF" width="1122" height="1402">
+    </figure>
+  </div>
+</section>
+
+<!-- ============ PARA QUEM ============ -->
+<section>
+  <div class="wrap">
+    <p class="clause">HAVING nivel = 'iniciante' <span class="dim">— para quem é</span></p>
+    <h2>Feito para quem já escreve código e ainda apanha do banco.</h2>
+
+    <div class="audience">
+      <div class="aud">
+        <h3>Estudantes de TI</h3>
+        <p>Cursos técnicos, Engenharia e Sistemas de Informação — o material que preenche o buraco entre a prova e o projeto que roda.</p>
+      </div>
+      <div class="aud">
+        <h3>Iniciantes e autodidatas</h3>
+        <p>Quem já fez o front, travou no backend e precisa entender PDO, sessões e segurança sem enrolação.</p>
+      </div>
+      <div class="aud">
+        <h3>Freelancers</h3>
+        <p>Quem precisa entregar um CRUD funcional, seguro e publicado no domínio do cliente — esta semana.</p>
+      </div>
+    </div>
+
+    <p class="notfor"><b style="color:var(--text)">Não é para você se</b> procura um curso em vídeo, quer aprender a programar do absoluto zero ou espera um framework pronto sem entender o que roda por baixo.</p>
+  </div>
+</section>
+
+<!-- ============ AUTOR ============ -->
+<section>
+  <div class="wrap-narrow">
+    <p class="clause">ORDER BY experiencia DESC <span class="dim">— quem escreveu</span></p>
+    <div class="author-grid">
+      <div class="sig" aria-hidden="true">AS</div>
+      <div>
+        <blockquote>“Atuo na área de tecnologia e ajudo desenvolvedores a entenderem o backend de forma simples, prática e focada no mercado de trabalho. Reuni aqui os principais desafios — e as soluções — que você vai enfrentar no dia a dia da profissão.”</blockquote>
+        <p class="name"><b>Aislan Souza</b> · autor do guia</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OFERTA ============ -->
+<section class="offer">
+  <div class="wrap">
+    <p class="clause">LIMIT 1 <span class="dim">— a oferta</span></p>
+    <h2>Tudo isso, por menos que um almoço.</h2>
+
+    <div class="offer-box">
+      <div class="offer-list">
+        <h3>O que entra no pacote</h3>
+        <ul>
+          <li><span>E-book Guia Prático de Consultas SQL · 12 módulos</span><span>R$ 67</span></li>
+          <li><span>Bônus 1 · Template estrutural em ZIP</span><span>R$ 47</span></li>
+          <li><span>Bônus 2 · Folha de consulta rápida em PDF</span><span>R$ 27</span></li>
+          <li class="total"><span>Valor somado</span><span>R$ 141</span></li>
+        </ul>
+      </div>
+
+      <div class="offer-buy">
+        <p class="from">Hoje você paga</p>
+        <p class="price"><sup>R$</sup>37</p>
+        <a class="cta" href="https://pay.hotmart.com/O107578540B">
+          QUERO MEU GUIA AGORA
+          <small>Compra segura · Hotmart</small>
+        </a>
+        <p class="note">Pix, boleto ou cartão parcelado.<br>Download liberado no e-mail em minutos.</p>
+      </div>
+    </div>
+
+    <div class="guarantee">
+      <div class="seal">7<small>DIAS</small></div>
+      <p><strong>Garantia incondicional de 7 dias.</strong> Baixe, leia tudo, rode o template. Se achar que o conteúdo não te ajudou, basta pedir o reembolso dentro da plataforma e a Hotmart devolve 100% do valor — sem pergunta nenhuma. O risco é todo meu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section>
+  <div class="wrap-narrow">
+    <p class="clause">-- FAQ <span class="dim">— antes de comprar</span></p>
+    <h2>Perguntas que sempre chegam.</h2>
+
+    <div style="margin-top:2rem">
+      <details>
+        <summary>Preciso saber programar para acompanhar?</summary>
+        <p>Você precisa da base: lógica e um pouco de HTML e PHP. O guia começa na configuração do ambiente e explica cada comando SQL, mas não é um curso de "programação do zero".</p>
+      </details>
+      <details>
+        <summary>Serve para MySQL e para outros bancos?</summary>
+        <p>Os exemplos são em MySQL/MariaDB com PHP e PDO — o combo mais usado em hospedagem compartilhada e em trabalho de faculdade. A sintaxe de SELECT, JOIN, GROUP BY e índices vale para qualquer banco relacional.</p>
+      </details>
+      <details>
+        <summary>Como recebo o material?</summary>
+        <p>Em PDF, por e-mail, assim que o pagamento é confirmado (no Pix e no cartão costuma ser em minutos). O template em ZIP e a folha de consulta vêm no mesmo acesso.</p>
+      </details>
+      <details>
+        <summary>O acesso expira?</summary>
+        <p>Não. O arquivo é seu: baixa, guarda e consulta quando precisar, sem mensalidade.</p>
+      </details>
+      <details>
+        <summary>E se não for o que eu esperava?</summary>
+        <p>Você tem 7 dias de garantia pela Hotmart. Pede o reembolso pela própria plataforma e recebe 100% de volta.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FECHAMENTO ============ -->
+<section class="final">
+  <div class="wrap-narrow">
+    <p class="clause">COMMIT;</p>
+    <h2>Da consulta que trava ao sistema no ar.</h2>
+    <p>Um erro de conexão te custa uma madrugada. Este guia custa R$ 37 e fica com você para sempre.</p>
+    <a class="cta" href="https://pay.hotmart.com/O107578540B">
+      QUERO MEU GUIA AGORA
+      <small>R$ 37 · 7 dias de garantia</small>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-cols">
+      <div>
+        <h4>Suporte</h4>
+        <p>Dúvida sobre o conteúdo, acesso ou download?<br>
+        <a href="mailto:aislan.ss29@gmail.com">aislan.ss29@gmail.com</a><br>
+        Resposta em até 48h úteis.</p>
+      </div>
+      <div>
+        <h4>Garantia e reembolso</h4>
+        <p>7 dias corridos a partir da compra, sem justificativa. O pedido é feito na própria Hotmart e o valor volta integral.</p>
+      </div>
+      <div>
+        <h4>O que você recebe</h4>
+        <p>Produto 100% digital, entregue em PDF e ZIP por e-mail e na área de membros. Nenhum item físico é enviado.</p>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 Aislan Souza · Guia Prático de Consultas SQL</span>
+      <span>Pagamento processado pela Hotmart</span>
+      <span><a href="../">Outros materiais</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // quem pede menos animacao no sistema recebe o video parado, no poster
+  (function () {
+    var v = document.querySelector('.fone video');
+    if (!v) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      v.removeAttribute('autoplay');
+      v.pause();
+    }
+  })();
+</script>
