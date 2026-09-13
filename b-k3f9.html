@@ -238,8 +238,8 @@
     <h2>Como usar o template</h2>
     <ol class="passos">
       <li><b>Descompacte na pasta do seu servidor local</b> — <code>htdocs</code> no XAMPP, <code>www</code> no WAMP.</li>
-      <li><b>Importe o <code>schema.sql</code> no phpMyAdmin</b> para criar as tabelas. É o mesmo banco usado nos exemplos do livro.</li>
-      <li><b>Abra <code>config/database.php</code></b> e troque host, nome do banco, usuário e senha pelos seus.</li>
+      <li><b>Importe o <code>sql/schema.sql</code> no phpMyAdmin</b> para criar as tabelas. Crie o banco com o nome <code>guia_sql</code> — é o que o template procura por padrão.</li>
+      <li><b>Copie o <code>.env.example</code> para <code>.env</code></b> e preencha <code>DB_NAME</code>, <code>DB_USER</code> e <code>DB_PASS</code> com os seus dados. O template lê as credenciais desse arquivo, não do código — por isso o <code>.env</code> nunca vai para o Git.</li>
       <li><b>Rode o projeto</b> e confira o módulo 2 do livro se a conexão reclamar — o erro mais comum está explicado lá.</li>
     </ol>
 
