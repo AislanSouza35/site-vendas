@@ -1,0 +1,256 @@
+<title>Bônus do livro — Do SELECT ao Deploy</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+  :root{
+    --ink:#071229;
+    --ink-2:#0c1b38;
+    --line:#1e3765;
+    --line-soft:#16294d;
+    --text:#e6edf9;
+    --muted:#9fb0ce;
+    --green:#2fd27a;
+    --green-ink:#052213;
+    --blue:#5aa9ff;
+    --amber:#f5b84e;
+
+    --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --body:"Source Sans 3","Segoe UI",Arial,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",Consolas,monospace;
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:clamp(1rem,.97rem + .16vw,1.08rem);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{max-width:100%;height:auto;display:block}
+
+  .wrap{width:min(780px,100% - 2.5rem);margin-inline:auto}
+
+  h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em;line-height:1.1}
+  h1{font-size:clamp(1.9rem,1.5rem + 1.8vw,2.8rem);font-weight:800}
+  h2{font-size:clamp(1.15rem,1.05rem + .45vw,1.4rem);font-weight:700;line-height:1.25}
+  h3{font-size:1.05rem;font-weight:700;line-height:1.3}
+  p{margin:0}
+  strong{color:#fff;font-weight:600}
+
+  .falta{
+    display:inline-block;
+    background:rgba(245,184,78,.15);
+    border:1px dashed var(--amber);
+    color:var(--amber);
+    font-family:var(--mono);
+    font-size:.72em;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:.1em .5em;
+    border-radius:4px;
+    vertical-align:middle;
+  }
+
+  /* ---- topo ---- */
+  header.topo{padding-block:clamp(3rem,7vw,4.5rem) clamp(2rem,4vw,3rem)}
+  .assinatura{display:flex;align-items:center;gap:1rem;margin-bottom:clamp(2rem,4vw,2.8rem)}
+  .marca{
+    width:42px;height:42px;flex:none;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--ink-2);
+    display:grid;place-items:center;
+    font-family:var(--display);
+    font-weight:800;
+    font-size:1rem;
+    color:var(--green);
+    letter-spacing:-.03em;
+  }
+  .assinatura b{font-family:var(--display);font-weight:700;font-size:1rem;letter-spacing:-.01em;display:block}
+  .assinatura span{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.74rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--green);
+    margin-bottom:1.1rem;
+  }
+  header.topo .intro{margin-top:1.3rem;color:var(--muted);font-size:clamp(1.05rem,1rem + .3vw,1.2rem);line-height:1.55}
+
+  /* ---- arquivos ---- */
+  .arquivos{padding-bottom:clamp(2.5rem,5vw,3.5rem);display:grid;gap:1rem}
+
+  .arq{
+    border:1px solid var(--line-soft);
+    border-radius:10px;
+    background:rgba(12,27,56,.55);
+    padding:1.5rem;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:1rem 1.6rem;
+    align-items:center;
+  }
+  @media (max-width:620px){.arq{grid-template-columns:1fr}}
+
+  .arq .tipo{
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--green);
+    margin-bottom:.45rem;
+  }
+  .arq p{color:var(--muted);font-size:.95rem;line-height:1.55;margin-top:.4rem}
+
+  .baixar{
+    display:inline-flex;
+    align-items:center;
+    gap:.55rem;
+    background:var(--green);
+    color:var(--green-ink);
+    font-family:var(--display);
+    font-weight:800;
+    font-size:.95rem;
+    text-decoration:none;
+    padding:.8rem 1.4rem;
+    border-radius:6px;
+    border:1px solid var(--green);
+    white-space:nowrap;
+    transition:background .16s ease,transform .16s ease;
+  }
+  .baixar:hover{background:#4ade8f;transform:translateY(-1px)}
+  .baixar:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+  .baixar::before{content:"↓";font-family:var(--mono);font-weight:700}
+
+  /* ---- como usar ---- */
+  .como{border-top:1px solid var(--line-soft);padding-block:clamp(2.5rem,5vw,3.5rem)}
+  .passos{list-style:none;margin:1.8rem 0 0;padding:0;display:grid;gap:1.1rem;counter-reset:p}
+  .passos li{padding-left:2.6rem;position:relative;color:var(--muted)}
+  .passos li::before{
+    counter-increment:p;
+    content:counter(p,decimal-leading-zero);
+    position:absolute;
+    left:0;
+    top:.1em;
+    font-family:var(--mono);
+    font-size:.75rem;
+    color:var(--green);
+  }
+  .passos b{color:var(--text);font-weight:600}
+  code{font-family:var(--mono);font-size:.9em;color:var(--blue)}
+
+  .aviso{
+    margin-top:2rem;
+    border-left:2px solid var(--line);
+    padding:.2rem 0 .2rem 1.2rem;
+    color:var(--muted);
+    font-size:.95rem;
+  }
+
+  footer{border-top:1px solid var(--line-soft);padding-block:2.4rem}
+  footer .wrap{
+    font-family:var(--mono);
+    font-size:.75rem;
+    color:#6d80a3;
+    line-height:1.8;
+    display:flex;
+    flex-wrap:wrap;
+    gap:.6rem 2rem;
+    justify-content:space-between;
+  }
+  footer a{color:var(--green);text-decoration:none;border-bottom:1px solid rgba(47,210,122,.3)}
+  footer a:hover{border-bottom-color:var(--green)}
+  footer a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+
+<header class="topo">
+  <div class="wrap">
+    <div class="assinatura">
+      <div class="marca" aria-hidden="true">AS</div>
+      <div>
+        <b>Aislan Souza</b>
+        <span>Material técnico · Ensino técnico</span>
+      </div>
+    </div>
+
+    <p class="eyebrow">Bônus do livro</p>
+    <h1>Você chegou no lugar certo.</h1>
+    <p class="intro">Esta página é o destino do QR code impresso no fim do <strong>Do SELECT ao Deploy: PHP e MySQL na prática</strong>. Os arquivos abaixo são os mesmos bônus da edição digital. Sem cadastro, sem senha — é só baixar.</p>
+  </div>
+</header>
+
+<section class="arquivos">
+  <div class="wrap" style="display:grid;gap:1rem">
+
+    <article class="arq">
+      <div>
+        <p class="tipo">Arquivo ZIP · Bônus 1</p>
+        <h3>Template estrutural do projeto</h3>
+        <p>A estrutura completa comentada linha por linha: configuração reutilizável entre projetos, camada de autenticação com proteção CSRF, Repository com PDO e o <code>schema.sql</code> para criar o banco.</p>
+      </div>
+      <a class="baixar" href="bonus/template-estrutural.zip">Baixar ZIP</a>
+    </article>
+
+    <article class="arq">
+      <div>
+        <p class="tipo">PDF · Bônus 2</p>
+        <h3>Cheat Sheet SQL</h3>
+        <p>CRUD, JOINs, funções agregadas e GROUP BY em uma folha só. Feito para deixar aberto no segundo monitor enquanto você escreve a consulta.</p>
+      </div>
+      <a class="baixar" href="bonus/cheat-sheet-sql.pdf">Baixar PDF</a>
+    </article>
+
+    <article class="arq">
+      <div>
+        <p class="tipo">PDF · Bônus 3</p>
+        <h3>Cheat Sheet PHP + PDO</h3>
+        <p>As funções do dia a dia: conexão, <code>prepare</code>, <code>bindParam</code>, <code>fetch</code> e <code>fetchAll</code>, transações e tratamento de erro — com a sintaxe correta ao lado de cada uma.</p>
+      </div>
+      <a class="baixar" href="bonus/cheat-sheet-php-pdo.pdf">Baixar PDF</a>
+    </article>
+
+    <article class="arq">
+      <div>
+        <p class="tipo">PDF · Bônus 4</p>
+        <h3>Roteiro de diagnóstico</h3>
+        <p>O que checar, e em que ordem, quando o sistema quebra: conexão recusada, consulta lenta, sessão que não persiste, deploy que sobe mas não roda.</p>
+      </div>
+      <a class="baixar" href="bonus/roteiro-diagnostico.pdf">Baixar PDF</a>
+    </article>
+
+  </div>
+</section>
+
+<section class="como">
+  <div class="wrap">
+    <h2>Como usar o template</h2>
+    <ol class="passos">
+      <li><b>Descompacte na pasta do seu servidor local</b> — <code>htdocs</code> no XAMPP, <code>www</code> no WAMP.</li>
+      <li><b>Importe o <code>schema.sql</code> no phpMyAdmin</b> para criar as tabelas. É o mesmo banco usado nos exemplos do livro.</li>
+      <li><b>Abra <code>config/database.php</code></b> e troque host, nome do banco, usuário e senha pelos seus.</li>
+      <li><b>Rode o projeto</b> e confira o módulo 2 do livro se a conexão reclamar — o erro mais comum está explicado lá.</li>
+    </ol>
+
+    <p class="aviso">Os arquivos são para uso pessoal e nos seus projetos, inclusive comerciais. O que eu peço é que você não redistribua o pacote nem revenda o material. Se algum arquivo não abrir ou o link falhar, me escreve que eu envio direto.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Aislan Souza · Bônus do livro impresso</span>
+    <span>Problema com o download? <a href="mailto:aislan.ss29@gmail.com?subject=Bonus%20do%20livro%20impresso">aislan.ss29@gmail.com</a></span>
+    <span><a href="./">Ver os outros materiais</a></span>
+  </div>
+</footer>
