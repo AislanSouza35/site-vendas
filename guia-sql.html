@@ -1,4 +1,4 @@
-<title>Guia Prático de Consultas SQL</title>
+<title>Do SELECT ao Deploy: PHP e MySQL na prática</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
@@ -147,13 +147,20 @@
   .price-inline{font-family:var(--mono);font-size:var(--step--1);color:var(--muted);line-height:1.5}
   .price-inline b{display:block;font-family:var(--display);font-size:1.5rem;color:var(--text);letter-spacing:-.02em}
 
-  .book{position:relative;margin-inline:-4%}
-  .book img{width:100%}
+  .book{position:relative}
+  .book img{
+    border-radius:3px 8px 8px 3px;
+    border:1px solid var(--line);
+    box-shadow:
+      -6px 0 0 0 #0a1c3d,
+      -7px 0 0 0 var(--line),
+      28px 34px 70px -24px rgba(0,0,0,.85);
+  }
   .book-tag{
     position:absolute;
     left:50%;
     transform:translate(-50%,-50%);
-    bottom:-0.6rem;
+    bottom:-1.4rem;
     background:var(--ink-2);
     border:1px solid var(--line);
     color:var(--muted);
@@ -521,8 +528,8 @@
       </div>
 
       <figure class="book" style="margin:0">
-        <img src="hero-livros.png" alt="Frente e verso do e-book Guia Prático de Consultas SQL, de Aislan Souza" width="1200" height="1000">
-        <figcaption class="book-tag">Frente e verso · 27 módulos + bônus</figcaption>
+        <img src="capa.png" alt="Capa do e-book Do SELECT ao Deploy: PHP e MySQL na prática, de Aislan Souza" width="1024" height="1536">
+        <figcaption class="book-tag">E-book + bônus · 27 módulos</figcaption>
       </figure>
     </div>
 
@@ -576,7 +583,7 @@ user <span class="s">'root'</span>@<span class="s">'localhost'</span> (using pas
     <div class="solution-grid">
       <div>
         <h2>Escrito de programador para programador.</h2>
-        <p class="lead muted" style="margin-top:1.4rem">O <strong>Guia Prático de Consultas SQL</strong> pega você no <code style="font-family:var(--mono);font-size:.9em;color:var(--blue)">SELECT *</code> e te deixa no sistema publicado. Sem teoria solta, sem promessa milagrosa: cada módulo é um problema real com o código ao lado.</p>
+        <p class="lead muted" style="margin-top:1.4rem">O <strong>Do SELECT ao Deploy: PHP e MySQL na prática</strong> pega você no <code style="font-family:var(--mono);font-size:.9em;color:var(--blue)">SELECT *</code> e te deixa no sistema publicado. Sem teoria solta, sem promessa milagrosa: cada módulo é um problema real com o código ao lado.</p>
         <ul class="checks">
           <li>Do básico (<b>SELECT, INSERT, UPDATE, DELETE</b>) às otimizações de performance com índices e EXPLAIN.</li>
           <li>Todo exemplo em <b>PHP + PDO com Prepared Statements</b> — o jeito certo desde a primeira linha.</li>
@@ -782,7 +789,7 @@ $stmt-&gt;execute();</pre>
       <div class="offer-list">
         <h3>O que entra no pacote</h3>
         <ul>
-          <li><span>E-book Guia Prático de Consultas SQL · 27 módulos</span><span>R$ 67</span></li>
+          <li><span>E-book Do SELECT ao Deploy: PHP e MySQL na prática · 27 módulos</span><span>R$ 67</span></li>
           <li><span>Bônus · Template estrutural com Auth e Repository</span><span>R$ 47</span></li>
           <li><span>Bônus · Cheat Sheets de SQL e PHP/PDO</span><span>R$ 27</span></li>
           <li class="total"><span>Valor somado</span><span>R$ 141</span></li>
@@ -870,7 +877,7 @@ $stmt-&gt;execute();</pre>
       </div>
     </div>
     <div class="foot-base">
-      <span>© 2026 Aislan Souza · Guia Prático de Consultas SQL</span>
+      <span>© 2026 Aislan Souza · Do SELECT ao Deploy: PHP e MySQL na prática</span>
       <span>Pagamento processado pela Hotmart</span>
       <span><a href="./">Outros materiais</a></span>
     </div>
@@ -895,7 +902,7 @@ $stmt-&gt;execute();</pre>
     phone="5531953475617"
     href="https://pay.hotmart.com/O107578540B?off=48b5w56c"
     producerName="Aislan da Silva Souza"
-    productName="Modelagem de Banco de Dados MySQL na Prática"
+    productName="Do SELECT ao Deploy: PHP e MySQL na prática"
     productId="ODUwNTU5Nw=="
     btnSize="40px"
     extraInfo=""
