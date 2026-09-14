@@ -139,6 +139,25 @@
     padding:.15rem .45rem;
   }
 
+  .falta{
+    display:inline-block;
+    background:rgba(245,184,78,.15);
+    border:1px dashed #f5b84e;
+    color:#f5b84e;
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:.15em .55em;
+    border-radius:4px;
+    white-space:nowrap;
+  }
+
+  .formato{margin-top:.9rem;font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;color:var(--muted)}
+  .formato a{color:var(--green);text-decoration:none;border-bottom:1px solid rgba(47,210,122,.3)}
+  .formato a:hover{border-bottom-color:var(--green)}
+  .formato a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
   .acao{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem}
   @media (min-width:721px){.acao{align-items:flex-end;text-align:right}}
   .preco{font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:-.03em;line-height:1}
@@ -224,7 +243,7 @@
 
 <section class="catalogo">
   <div class="wrap">
-    <p class="eyebrow">SELECT * FROM materiais <span class="n">1 disponível · 1 em produção</span></p>
+    <p class="eyebrow">SELECT * FROM materiais <span class="n">3 disponíveis</span></p>
 
     <article class="item">
       <div class="capa">
@@ -240,6 +259,7 @@
         <ul class="tags">
           <li>SQL</li><li>PHP</li><li>MySQL</li><li>PDO</li><li>JOINs</li><li>Índices</li><li>Segurança</li><li>Deploy</li>
         </ul>
+        <p class="formato">Disponível também em <a href="livro.html">livro impresso</a></p>
       </div>
       <div class="acao">
         <p class="preco"><sup>R$</sup>37<small>27 módulos + bônus</small></p>
@@ -249,22 +269,43 @@
 
     <article class="item">
       <div class="capa">
-        <img src="capa-js.png" alt="Capa do material JavaScript: Introdução à Programação, de Aislan Souza" width="1024" height="1536" loading="lazy">
+        <img src="capa-workbench.png" alt="Capa do material Criando um Banco de Dados do Zero: Projeto Prático de Controle de Estoque" width="1024" height="1448" loading="lazy">
       </div>
       <div class="meta">
         <div class="linha">
           <span class="id">#02 · E-book</span>
-          <span class="pill off">Em produção</span>
+          <span class="pill on">Disponível</span>
         </div>
-        <h3>JavaScript: Introdução à Programação</h3>
-        <p>Conceitos iniciais, variáveis, comentários e operadores aritméticos — a base da linguagem explicada com o código ao lado, no mesmo formato direto ao ponto do primeiro material.</p>
+        <h3>Criando um Banco de Dados do Zero</h3>
+        <p>Um projeto de controle de estoque do começo ao fim, no MySQL Workbench: você modela no diagrama EER, gera o banco com Forward Engineer e sai com Views, Procedures, Triggers e backup funcionando. Cada página é uma etapa, com a tela do Workbench marcada passo a passo.</p>
         <ul class="tags">
-          <li>JavaScript</li><li>let, const e var</li><li>Comentários</li><li>Operadores</li><li>Lógica</li>
+          <li>MySQL Workbench</li><li>Modelagem EER</li><li>CRUD</li><li>Views</li><li>Procedures</li><li>Triggers</li><li>Índices</li><li>Backup</li>
         </ul>
       </div>
       <div class="acao">
-        <p class="preco em-breve">Em breve<small>lançamento em preparação</small></p>
-        <a class="btn fantasma" href="mailto:aislan.ss29@gmail.com?subject=Me%20avise%20quando%20o%20material%20de%20JavaScript%20sair">Avise-me</a>
+        <p class="preco"><sup>R$</sup>19,90<small>20 etapas ilustradas</small></p>
+        <a class="btn" href="https://pay.hotmart.com/D107600037D">Ver o material</a>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="capa">
+        <img src="capa-js.png" alt="Capa do material Introdução à Programação com JavaScript, de Aislan Souza" width="1024" height="1024" loading="lazy">
+      </div>
+      <div class="meta">
+        <div class="linha">
+          <span class="id">#03 · E-book</span>
+          <span class="pill on">Disponível</span>
+        </div>
+        <h3>Introdução à Programação com JavaScript</h3>
+        <p>Do primeiro comando às estruturas de controle. Começa em variáveis e comentários e vai até onde o código toma decisões e repete tarefas sozinho — que é exatamente onde a maioria trava ao aprender a programar.</p>
+        <ul class="tags">
+          <li>JavaScript</li><li>let, const e var</li><li>Comentários</li><li>Operadores</li><li>if e else</li><li>Repetições</li><li>Lógica</li>
+        </ul>
+      </div>
+      <div class="acao">
+        <p class="preco"><sup>R$</sup>19,90<small>39 páginas</small></p>
+        <a class="btn" href="https://pay.hotmart.com/F107599285W">Ver o material</a>
       </div>
     </article>
   </div>
