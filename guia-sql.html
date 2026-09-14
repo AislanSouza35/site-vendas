@@ -1,4 +1,5 @@
 <title>Do SELECT ao Deploy: PHP e MySQL na prática</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
@@ -500,6 +501,9 @@
   @media (prefers-reduced-motion:reduce){
     *{animation:none !important;transition:none !important}
   }
+
+  .marca img,.retrato img,.sig img{width:100%;height:100%;object-fit:contain;display:block}
+  .marca{overflow:hidden}
 </style>
 
 <!-- ============ HERO ============ -->
@@ -770,7 +774,7 @@ $stmt-&gt;execute();</pre>
   <div class="wrap-narrow">
     <p class="clause">ORDER BY experiencia DESC <span class="dim">— quem escreveu</span></p>
     <div class="author-grid">
-      <div class="sig" aria-hidden="true">AS</div>
+      <div class="sig"><img src="logo-bp.png" alt="" width="1254" height="1254"></div>
       <div>
         <blockquote>“Atuo na área de tecnologia e ajudo desenvolvedores a entenderem o backend de forma simples, prática e focada no mercado de trabalho. Reuni aqui os principais desafios — e as soluções — que você vai enfrentar no dia a dia da profissão.”</blockquote>
         <p class="name"><b>Aislan Souza</b> · autor do guia</p>
